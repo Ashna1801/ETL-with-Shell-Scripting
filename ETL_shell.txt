@@ -1,0 +1,430 @@
+--EXTRACTING DATA FROM A DELIMITED FILE
+
+theia@theiadocker-ashnakhera9:/home/project$ echo "database" | cut -c1-4
+data
+theia@theiadocker-ashnakhera9:/home/project$ echo "database" | cut -c 1-4
+data
+theia@theiadocker-ashnakhera9:/home/project$ echo "database" |cut -c 5-8
+base
+theia@theiadocker-ashnakhera9:/home/project$ echo "database" | cut -c 1,5
+db
+theia@theiadocker-ashnakhera9:/home/project$ cut -d":" -f1 /etc/passwd
+root
+daemon
+bin
+sys
+sync
+games
+man
+lp
+mail
+news
+uucp
+proxy
+www-data
+backup
+list
+irc
+gnats
+nobody
+_apt
+messagebus
+theia
+mongodb
+ntp
+cassandra
+postgres
+theia@theiadocker-ashnakhera9:/home/project$ cut -d":" -f 1,3,6 /etc/passwd
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ cut -d":" -f 3-6 /etc/passwd
+0:0:root:/root
+1:1:daemon:/usr/sbin
+2:2:bin:/bin
+3:3:sys:/dev
+4:65534:sync:/bin
+5:60:games:/usr/games
+6:12:man:/var/cache/man
+7:7:lp:/var/spool/lpd
+8:8:mail:/var/mail
+9:9:news:/var/spool/news
+10:10:uucp:/var/spool/uucp
+13:13:proxy:/bin
+33:33:www-data:/var/www
+34:34:backup:/var/backups
+38:38:Mailing List Manager:/var/list
+39:39:ircd:/var/run/ircd
+41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats
+65534:65534:nobody:/nonexistent
+100:65534::/nonexistent
+101:101::/nonexistent
+1000:1000:,,,:/home/theia
+102:106::/var/lib/mongodb
+103:107::/nonexistent
+104:108:Cassandra database,,,:/var/lib/cassandra
+105:109:PostgreSQL administrator,,,:/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ 
+
+
+
+
+
+
+
+--Transforming data using Tr
+
+theia@theiadocker-ashnakhera9:/home/project$ echo "Shell Scripting" | tr "[a-z]" "[A-Z]"
+SHELL SCRIPTING
+theia@theiadocker-ashnakhera9:/home/project$ echo "Shell Scripting" | tr "[A-Z]" "[a-z}"
+shell scripting
+theia@theiadocker-ashnakhera9:/home/project$ ps
+    PID TTY          TIME CMD
+    462 pts/1    00:00:01 bash
+    682 pts/1    00:00:00 ps
+theia@theiadocker-ashnakhera9:/home/project$ ps | tr -s " "
+ PID TTY TIME CMD
+ 462 pts/1 00:00:01 bash
+ 683 pts/1 00:00:00 ps
+ 684 pts/1 00:00:00 tr
+theia@theiadocker-ashnakhera9:/home/project$ echo "My login pin is 12345" | tr - d "[0-9]"
+tr: extra operand ‘[0-9]’
+Try 'tr --help' for more information.
+theia@theiadocker-ashnakhera9:/home/project$ echo "My login pin is 12345" | tr - d "[:digit:]"
+tr: extra operand ‘[:digit:]’
+Try 'tr --help' for more information.
+theia@theiadocker-ashnakhera9:/home/project$ echo "My login pin is 5634" | tr -d "[:digit:]"
+My login pin is 
+theia@theiadocker-ashnakhera9:/home/project$ echo "My login pin is 5634" | tr -d "[0-9]"
+My login pin is 
+theia@theiadocker-ashnakhera9:/home/project$ 
+
+--Loading Data 
+
+theia@theiadocker-ashnakhera9:/home/project$ start_postgres
+Starting your Postgres database....
+This process can take up to a minute.
+      
+Postgres database started, waiting for all services to be ready....
+      
+Your Postgres database is now ready to use and available with username: postgres password: MTA2MjktYXNobmFr
+
+You can access your Postgres database via:
+ • The Browser with pgadmin
+   • URL: https://ashnakhera9-5050.theiadocker-2-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai/browser/
+   • Database Password: MTA2MjktYXNobmFr
+ • CommandLine: psql --username=postgres --host=localhost
+theia@theiadocker-ashnakhera9:/home/project$ psql --username=postgres --host=localhost
+psql (14.4 (Ubuntu 14.4-1.pgdg18.04+1), server 13.2)
+Type "help" for help.
+
+postgres=# \c template1
+psql (14.4 (Ubuntu 14.4-1.pgdg18.04+1), server 13.2)
+You are now connected to database "template1" as user "postgres".
+template1=# create table users(username varchar(50),userid int,homedirectory varchar(100));
+CREATE TABLE
+template1=# \q
+theia@theiadocker-ashnakhera9:/home/project$ bash csv2db.sh
+Extracting data
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ bash csv2db.sh
+Extracting data
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ cat extracted-data.txt
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ cat extracted-data.txt
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ 
+theia@theiadocker-ashnakhera9:/home/project$ cat transformed-data.txt
+cat: transformed-data.txt: No such file or directory
+theia@theiadocker-ashnakhera9:/home/project$ cat transformed-data.csv
+cat: transformed-data.csv: No such file or directory
+theia@theiadocker-ashnakhera9:/home/project$ cat transformed-data.csv
+cat: transformed-data.csv: No such file or directory
+theia@theiadocker-ashnakhera9:/home/project$ bash csv2db.sh
+Extracting data
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+Transforming data
+root,0,/root
+daemon,1,/usr/sbin
+bin,2,/bin
+sys,3,/dev
+sync,4,/bin
+games,5,/usr/games
+man,6,/var/cache/man
+lp,7,/var/spool/lpd
+mail,8,/var/mail
+news,9,/var/spool/news
+uucp,10,/var/spool/uucp
+proxy,13,/bin
+www-data,33,/var/www
+backup,34,/var/backups
+list,38,/var/list
+irc,39,/var/run/ircd
+gnats,41,/var/lib/gnats
+nobody,65534,/nonexistent
+_apt,100,/nonexistent
+messagebus,101,/nonexistent
+theia,1000,/home/theia
+mongodb,102,/var/lib/mongodb
+ntp,103,/nonexistent
+cassandra,104,/var/lib/cassandra
+postgres,105,/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ cat transformed-data.csv
+root,0,/root
+daemon,1,/usr/sbin
+bin,2,/bin
+sys,3,/dev
+sync,4,/bin
+games,5,/usr/games
+man,6,/var/cache/man
+lp,7,/var/spool/lpd
+mail,8,/var/mail
+news,9,/var/spool/news
+uucp,10,/var/spool/uucp
+proxy,13,/bin
+www-data,33,/var/www
+backup,34,/var/backups
+list,38,/var/list
+irc,39,/var/run/ircd
+gnats,41,/var/lib/gnats
+nobody,65534,/nonexistent
+_apt,100,/nonexistent
+messagebus,101,/nonexistent
+theia,1000,/home/theia
+mongodb,102,/var/lib/mongodb
+ntp,103,/nonexistent
+cassandra,104,/var/lib/cassandra
+postgres,105,/var/lib/postgresql
+theia@theiadocker-ashnakhera9:/home/project$ 
+theia@theiadocker-ashnakhera9:/home/project$ bash csv2db.sh
+Extracting data
+root:0:/root
+daemon:1:/usr/sbin
+bin:2:/bin
+sys:3:/dev
+sync:4:/bin
+games:5:/usr/games
+man:6:/var/cache/man
+lp:7:/var/spool/lpd
+mail:8:/var/mail
+news:9:/var/spool/news
+uucp:10:/var/spool/uucp
+proxy:13:/bin
+www-data:33:/var/www
+backup:34:/var/backups
+list:38:/var/list
+irc:39:/var/run/ircd
+gnats:41:/var/lib/gnats
+nobody:65534:/nonexistent
+_apt:100:/nonexistent
+messagebus:101:/nonexistent
+theia:1000:/home/theia
+mongodb:102:/var/lib/mongodb
+ntp:103:/nonexistent
+cassandra:104:/var/lib/cassandra
+postgres:105:/var/lib/postgresql
+Transforming data
+root,0,/root
+daemon,1,/usr/sbin
+bin,2,/bin
+sys,3,/dev
+sync,4,/bin
+games,5,/usr/games
+man,6,/var/cache/man
+lp,7,/var/spool/lpd
+mail,8,/var/mail
+news,9,/var/spool/news
+uucp,10,/var/spool/uucp
+proxy,13,/bin
+www-data,33,/var/www
+backup,34,/var/backups
+list,38,/var/list
+irc,39,/var/run/ircd
+gnats,41,/var/lib/gnats
+nobody,65534,/nonexistent
+_apt,100,/nonexistent
+messagebus,101,/nonexistent
+theia,1000,/home/theia
+mongodb,102,/var/lib/mongodb
+ntp,103,/nonexistent
+cassandra,104,/var/lib/cassandra
+postgres,105,/var/lib/postgresql
+Loading data
+You are now connected to database "template1" as user "postgres".
+COPY 25
+theia@theiadocker-ashnakhera9:/home/project$ ^C
+theia@theiadocker-ashnakhera9:/home/project$ echo '\c template1; \\SELECT * from users;' | psql --username=postgres --host=localhost
+You are now connected to database "template1" as user "postgres".
+  username  | userid |    homedirectory    
+------------+--------+---------------------
+ root       |      0 | /root
+ daemon     |      1 | /usr/sbin
+ bin        |      2 | /bin
+ sys        |      3 | /dev
+ sync       |      4 | /bin
+ games      |      5 | /usr/games
+ man        |      6 | /var/cache/man
+ lp         |      7 | /var/spool/lpd
+ mail       |      8 | /var/mail
+ news       |      9 | /var/spool/news
+ uucp       |     10 | /var/spool/uucp
+ proxy      |     13 | /bin
+ www-data   |     33 | /var/www
+ backup     |     34 | /var/backups
+ list       |     38 | /var/list
+ irc        |     39 | /var/run/ircd
+ gnats      |     41 | /var/lib/gnats
+ nobody     |  65534 | /nonexistent
+ _apt       |    100 | /nonexistent
+ messagebus |    101 | /nonexistent
+ theia      |   1000 | /home/theia
+ mongodb    |    102 | /var/lib/mongodb
+ ntp        |    103 | /nonexistent
+ cassandra  |    104 | /var/lib/cassandra
+ postgres   |    105 | /var/lib/postgresql
+(25 rows)
+
+theia@theiadocker-ashnakhera9:/home/project$ 
